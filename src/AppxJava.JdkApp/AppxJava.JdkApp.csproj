@@ -75,6 +75,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <None Include="AppX\package.proj" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\external\WindowsAPICodePack\Microsoft.WindowsAPICodePack.Shell\Microsoft.WindowsAPICodePack.Shell.csproj">
@@ -86,12 +87,15 @@
       <Name>Microsoft.WindowsAPICodePack</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="AppX\AppxManifest.xml" />
+    <Content Include="AppX\Assets\Square150x150Logo.png" />
+    <Content Include="AppX\Assets\Square44x44Logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Import Project="$(SolutionDir)external\AppxPackaging\Sunburst.AppxPackaging.Tasks\Targets\GetProjectFiles.targets" />
+  <Target Name="AppxBuild" AfterTargets="AfterBuild">
+    <MSBuild Projects="AppX\package.proj" Targets="Build" Properties="Configuration=$(Configuration); SolutionDir=$(SolutionDir)" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <AppxPackageName>JdkApp</AppxPackageName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AppxManifest Include="AppxManifest.xml" />
+    <VisualAsset Include="Assets\Square44x44Logo.png" />
+    <VisualAsset Include="Assets\Square150x150Logo.png" />
+
+    <ProjectReference Include="$(SolutionDir)src\AppxJava.JdkApp\AppxJava.JdkApp.csproj">
+      <Destination>Launcher</Destination>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Import Project="$(SolutionDir)external\AppxPackaging\Sunburst.AppxPackaging.Tasks\Targets\AppxPackaging.targets"/>
+</Project>

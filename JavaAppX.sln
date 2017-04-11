@@ -25,6 +25,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAPICodePack.ShellExtensions", "external\WindowsAPICodePack\Microsoft.WindowsAPICodePack.ShellExtensions\Microsoft.WindowsAPICodePack.ShellExtensions.csproj", "{F3C863EC-33F4-4ED2-9D67-00BF3EEEAB64}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppxJava.JdkApp", "src\AppxJava.JdkApp\AppxJava.JdkApp.csproj", "{4265725E-5C9F-484F-B2BD-FEE74B8F5F31}"
+	ProjectSection(ProjectDependencies) = postProject
+		{736745DC-6341-4C09-AD49-1B988674C54E} = {736745DC-6341-4C09-AD49-1B988674C54E}
+		{C97A09E0-1999-417D-9DEF-F6E766A7762B} = {C97A09E0-1999-417D-9DEF-F6E766A7762B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
