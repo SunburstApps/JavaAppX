@@ -12,6 +12,13 @@
     <ProjectReference Include="$(SolutionDir)src\AppxJava.JdkApp\AppxJava.JdkApp.csproj">
       <Destination>Launcher</Destination>
     </ProjectReference>
+    
+    <Content Include="$(SolutionDir)$(Configuration)\AppxJava.ComLauncher.exe">
+      <Destination>Launcher</Destination>
+    </Content>
+    <Content Include="$(SolutionDir)$(Configuration)\AppxJava.ComLauncherPS.dll">
+      <Destination>Launcher</Destination>
+    </Content>
   </ItemGroup>
 
   <Import Project="$(SolutionDir)external\AppxPackaging\Sunburst.AppxPackaging.Tasks\Targets\AppxPackaging.targets"/>
