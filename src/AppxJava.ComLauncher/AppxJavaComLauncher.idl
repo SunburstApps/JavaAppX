@@ -1,0 +1,18 @@
+// AppxJavaComLauncher.idl : IDL source for AppxJava.ComLauncher
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (AppxJavaComLauncher.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(B140CC3A-1AAE-4A88-8C63-3D51EF60BE41),
+	version(1.0),
+]
+library AppxJavaComLauncherLib
+{
+	importlib("stdole2.tlb");
+};
+
