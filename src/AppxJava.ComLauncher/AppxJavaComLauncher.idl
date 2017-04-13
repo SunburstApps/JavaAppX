@@ -1,12 +1,125 @@
 import "oaidl.idl";
 import "ocidl.idl";
 
+
+[uuid(05E694E8-D211-4D1C-9DCB-D42B9C6E74C7)]
+interface IRunningProcess : IUnknown
+{
+	[propget] HRESULT StandardInput([out, retval] ISequentialStream **ppStream);
+	[propget] HRESULT StandardOutput([out, retval] ISequentialStream **ppStream);
+	[propget] HRESULT StandardError([out, retval] ISequentialStream **ppStream);
+
+	[propget] HRESULT HasExited([out, retval] VARIANT_BOOL *bExited);
+	[propget] HRESULT ExitCode([out, retval] INT *iExitCode);
+
+	HRESULT Kill();
+	HRESULT WaitForExit([in] ULONG ulTimeoutMillisconds);
+	HRESULT WaitForExitIndefinite();
+};
+
+typedef enum
+{
+	JAVA_LAUNCH_STYLE_BACKGROUND = 0,
+	JAVA_LAUNCH_STYLE_CREATE_CONSOLE_WINDOW,
+	JAVA_LAUNCH_STYLE_GUI
+} JAVA_LAUNCH_STYLE;
+
+[uuid(D704B65E-8559-4087-88C7-0A5C7ADB2407)]
+interface IJavaLauncher : IUnknown
+{
+	[propget] HRESULT WorkingDirectory([out, retval, string] BSTR *pstrWorkingDirectory);
+	[propput] HRESULT WorkingDirectory([in, string] BSTR strWorkingDirectory);
+	[propget] HRESULT ClassPath([out, retval] SAFEARRAY(BSTR) *pClassPath);
+	[propput] HRESULT ClassPath([in] SAFEARRAY(BSTR) classPath);
+	[propget] HRESULT ExtraJavaArguments([out, retval] SAFEARRAY(BSTR) *pExtraJavaArgv);
+	[propput] HRESULT ExtraJavaArguments([in] SAFEARRAY(BSTR) extraJavaArgv);
+	[propget] HRESULT ProgramArguments([out, retval] SAFEARRAY(BSTR) *pArgv);
+	[propput] HRESULT ProgramArguments([in] SAFEARRAY(BSTR) argv);
+
+	HRESULT LaunchClass([in] BSTR className, [in] JAVA_LAUNCH_STYLE launchStyle, [out, retval] IRunningProcess **pProcess);
+	HRESULT LaunchJarFile([in] BSTR jarPath, [in] JAVA_LAUNCH_STYLE launchStyle, [out, retval] IRunningProcess **pProcess);
+};
+
+typedef enum
+{
+	JDK_TOOL_JAVA_COMPILER = 0, // first so it is the default
+
+	JDK_TOOL_APPLETVIEWER,
+	// apt.exe is not included here, as it is deprecated
+	JDK_TOOL_EXTCHECK,
+	JDK_TOOL_IDL_TO_JAVA_COMPILER,
+	JDK_TOOL_JAR_ARCHIVER,
+	JDK_TOOL_JAR_SIGNER,
+	JDK_TOOL_JAVA_DOCUMENTATION_GENERATOR,
+	JDK_TOOL_JNI_HEADER_GENERATOR,
+	JDK_TOOL_JAVA_DISASSEMBLER,
+	JDK_TOOL_JAVA_RMI_RUNNER,
+	JDK_TOOL_JCMD,
+	JDK_TOOL_JCONSOLE,
+	JDK_TOOL_JAVA_DEBUGGER,
+	JDK_TOOL_JHAT,
+	JDK_TOOL_JVM_INTROSPECTION_UTILITY,
+	JDK_TOOL_JVM_MEMORY_DUMP_UTILITY,
+	JDK_TOOL_JPS,
+	JDK_TOOL_JAVA_SCRIPT_RUNNER,
+	JDK_TOOL_JSADEBUG_DAEMON,
+	JDK_TOOL_JAVA_STACK_DUMPER,
+	JDK_TOOL_JVM_SAMPLER,
+	JDK_TOOL_JSTAT_DAEMON,
+	JDK_TOOL_KEY_AND_CERT_MANAGER,
+	JDK_TOOL_KERBEROS_KINIT,
+	JDK_TOOL_KERBEROS_KLIST,
+	JDK_TOOL_KERBEROS_KTAB,
+	JDK_TOOL_NATIVE2ASCII,
+	JDK_TOOL_ORB_DAEMON,
+	JDK_TOOL_PACK200,
+	JDK_TOOL_POLICY_TOOL,
+	JDK_TOOL_RMI_COMPILER,
+	JDK_TOOL_RMI_DAEMON,
+	JDK_TOOL_RMI_REGISTRY_TOOL,
+	JDK_TOOL_SCHEMA_GENERATOR,
+	JDK_TOOL_SERIAL_VERSION_UTILITY,
+	JDK_TOOL_SERVER_TOOL,
+	JDK_TOOL_TNAME_SERVICE,
+	JDK_TOOL_UNPACK200,
+	JDK_TOOL_WSDL_GENERATOR,
+	JDK_TOOL_WSDL_IMPORTER,
+	JDK_TOOL_JAXB_BINDING_COMPILER
+} JDK_TOOL;
+
+[uuid(BB3B0B30-9FA2-4D27-856A-4190FF19CA8B)]
+interface IJdkToolLauncher : IUnknown
+{
+	[propget] HRESULT ToolName([out, retval] JDK_TOOL *pToolId);
+	[propput] HRESULT ToolName([in] JDK_TOOL *toolId);
+
+	[propget] HRESULT WorkingDirectory([out, retval, string] BSTR *pstrWorkingDirectory);
+	[propput] HRESULT WorkingDirectory([in, string] BSTR strWorkingDirectory);
+	[propget] HRESULT ProgramArguments([out, retval] SAFEARRAY(BSTR) *pArgv);
+	[propput] HRESULT ProgramArguments([in] SAFEARRAY(BSTR) argv);
+	[propget] HRESULT EnvironmentVariables([out, retval] SAFEARRAY(BSTR) *pArgv);
+	[propput] HRESULT EnvironmentVariables([in] SAFEARRAY(BSTR) argv);
+
+	HRESULT Launch([in] JAVA_LAUNCH_STYLE launchStyle, [out, retval] IRunningProcess **pProcess);
+};
+
 [
 	uuid(B140CC3A-1AAE-4A88-8C63-3D51EF60BE41),
 	version(1.0),
 ]
-library AppxJavaComLauncherLib
+library AppxJavaLauncherLib
 {
 	importlib("stdole2.tlb");
-};
 
+	[uuid(67CE3994-EC0A-4364-B8BD-DC6D1C61FCF0)]
+	coclass JavaLauncher
+	{
+		[default] interface IJavaLauncher;
+	};
+
+	[uuid(5EDE5D2D-C324-4970-86B3-6E006D4DD824)]
+	coclass JdkLauncher
+	{
+		[default] interface IJdkToolLauncher;
+	};
+};
