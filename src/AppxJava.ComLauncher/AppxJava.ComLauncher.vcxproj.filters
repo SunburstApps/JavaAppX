@@ -28,6 +28,9 @@
     <ClCompile Include="AppxJavaComLauncher_i.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="CRunningProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
