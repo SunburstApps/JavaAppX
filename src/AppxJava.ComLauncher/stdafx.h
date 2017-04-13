@@ -8,7 +8,7 @@
 #define STRICT
 #endif
 
-#include "targetver.h"
+#include <SDKDDKVer.h>
 
 #define _ATL_APARTMENT_THREADED
 
