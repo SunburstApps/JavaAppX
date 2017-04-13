@@ -2,8 +2,6 @@
 #include "resource.h"
 #include "AppxJavaComLauncher_i.h"
 
-using namespace ATL;
-
 class CAppxJavaComLauncherModule : public ATL::CAtlExeModuleT< CAppxJavaComLauncherModule >
 {
 public:
