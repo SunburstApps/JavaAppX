@@ -96,6 +96,9 @@ Exit 1
 </Command>
       <Message>Checking for required files</Message>
     </PreBuildEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;PROXY_STUB_PROJECT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -114,6 +117,9 @@ Exit 1
 </Command>
       <Message>Checking for required files</Message>
     </PreBuildEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;PROXY_STUB_PROJECT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -135,6 +141,9 @@ Exit 1
 </Command>
       <Message>Checking for required files</Message>
     </PreBuildEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;PROXY_STUB_PROJECT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -156,14 +165,20 @@ Exit 1
 </Command>
       <Message>Checking for required files</Message>
     </PreBuildEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;PROXY_STUB_PROJECT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <None Include="AppxJava.ComLauncherps.def" />
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppxJavaComLauncher_i.c" />
     <ClCompile Include="AppxJavaComLauncher_p.c" />
     <ClCompile Include="dlldata.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AppxJava.ComLauncherps.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AppxJava.ComLauncherPS.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
