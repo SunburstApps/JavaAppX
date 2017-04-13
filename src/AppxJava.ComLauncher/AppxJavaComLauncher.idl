@@ -91,7 +91,7 @@ typedef enum
 interface IJdkToolLauncher : IUnknown
 {
 	[propget] HRESULT ToolName([out, retval] JDK_TOOL *pToolId);
-	[propput] HRESULT ToolName([in] JDK_TOOL *toolId);
+	[propput] HRESULT ToolName([in] JDK_TOOL toolId);
 
 	[propget] HRESULT WorkingDirectory([out, retval, string] BSTR *pstrWorkingDirectory);
 	[propput] HRESULT WorkingDirectory([in, string] BSTR strWorkingDirectory);
