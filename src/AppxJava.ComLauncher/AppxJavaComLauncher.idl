@@ -13,7 +13,7 @@ interface IRunningProcess : IUnknown
 	[propget] HRESULT ExitCode([out, retval] INT *iExitCode);
 
 	HRESULT Kill();
-	HRESULT WaitForExit([in] ULONG ulTimeoutMillisconds);
+	HRESULT WaitForExit([in] DWORD ulTimeoutMillisconds);
 	HRESULT WaitForExitIndefinite();
 };
 
