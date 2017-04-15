@@ -84,4 +84,23 @@ public:
 	{
 		return WaitForExit(INFINITE);
 	}
+
+	virtual HRESULT STDMETHODCALLTYPE Initialize(HANDLE hProcess)
+	{
+		if (hProcess == INVALID_HANDLE_VALUE) return E_INVALIDARG;
+		if (this->hProcess != nullptr) return E_FAIL;
+		this->hProcess = hProcess;
+		return S_OK;
+	}
 };
+
+HRESULT CRunningProcess_CreateInstance(CComPtr<IRunningProcess>& comObj, HANDLE hProcess)
+{
+	HRESULT hr = CRunningProcess::CreateInstance(&comObj);
+	if (FAILED(hr)) return hr;
+
+	hr = comObj->Initialize(hProcess);
+	if (FAILED(hr)) return hr;
+
+	return S_OK;
+}

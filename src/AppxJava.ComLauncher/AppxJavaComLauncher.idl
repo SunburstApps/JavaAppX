@@ -1,7 +1,6 @@
 import "oaidl.idl";
 import "ocidl.idl";
 
-
 [uuid(05E694E8-D211-4D1C-9DCB-D42B9C6E74C7)]
 interface IRunningProcess : IUnknown
 {
@@ -15,6 +14,8 @@ interface IRunningProcess : IUnknown
 	HRESULT Kill();
 	HRESULT WaitForExit([in] DWORD ulTimeoutMillisconds);
 	HRESULT WaitForExitIndefinite();
+
+	[local] HRESULT Initialize(HANDLE hProcess);
 };
 
 typedef enum
