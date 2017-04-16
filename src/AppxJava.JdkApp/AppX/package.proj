@@ -22,4 +22,41 @@
   </ItemGroup>
 
   <Import Project="$(SolutionDir)external\AppxPackaging\Sunburst.AppxPackaging.Tasks\Targets\AppxPackaging.targets"/>
+
+  <Target Name="UnpackJDKFiles" BeforeTargets="AppxCreatePackageLayout">
+    <PropertyGroup>
+      <_JDKDownloadLocation>https://github.com/ojdkbuild/ojdkbuild/releases/tag/1.8.0.121-2</_JDKDownloadLocation>
+      <_JDKBinaryZipFileName>java-1.8.0-openjdk-1.8.0.121-2.b13.ojdkbuild.windows.x86_64.zip</_JDKBinaryZipFileName>
+      <_JDKSourceZipFileName>java-1.8.0-openjdk-1.8.0.121-2.b13.ojdkbuild.windows.src.solid.zip</_JDKSourceZipFileName>
+
+      <_JDKBinaryZipPath>$(SolutionDir)bin\OpenJDKBinaries\$(_JDKBinaryZipFileName)</_JDKBinaryZipPath>
+      <_JDKSourceZipPath>$(SolutionDir)bin\OpenJDKBinaries\$(_JDKSourceZipFileName)</_JDKSourceZipPath>
+    </PropertyGroup>
+
+    <Error Text="'$(_JDKBinaryZipFileName)' file not found, please download from $(_JDKDownloadLocation)" Condition="!Exists($(_JDKBinaryZipPath))" />
+    <Error Text="'$(_JDKSourceZipFileName)' file not found, please download from $(_JDKDownloadLocation) and extract (file is double-zipped)" Condition="!Exists($(_JDKSourceZipPath))" />
+
+    <MakeDir Directories="$(SolutionDir)bin\OpenJDKBinaries\extracted" Condition="!Exists('$(SolutionDir)bin\OpenJDKBinaries\extracted')" />
+    <Exec Command="7z x &quot;$(_JDKBinaryZipPath)&quot;" WorkingDirectory="$(SolutionDir)bin\OpenJDKBinaries\extracted" Condition="!Exists('$(SolutionDir)bin\OpenJDKBinaries\extracted\java-1.8.0-openjdk-1.8.0.121-2.b13.ojdkbuild.windows.x86_64\bin\java.exe')" />
+
+    <ItemGroup>
+      <_JDKContent Include="$(SolutionDir)bin\OpenJDKBinaries\extracted\java-1.8.0-openjdk-1.8.0.121-2.b13.ojdkbuild.windows.x86_64\**\*.*" />
+    </ItemGroup>
+
+    <CreateItem Include="@(_JDKContent -> '$(AppxPackageLayoutDir)VFS\ProgramFilesX64\OpenJDK\%(RecursiveDir)')">
+      <Output TaskParameter="Include" ItemName="_JDKDirectory" />
+    </CreateItem>
+
+    <MakeDir Directories="@(_JDKDirectory)" Condition="!Exists('%(FullPath)')" />
+
+    <ItemGroup>
+      <Content Include="$(_JDKSourceZipPath)">
+        <Destination>VFS\ProgramFilesX64\OpenJDK</Destination>
+      </Content>
+
+      <Content Include="@(_JDKContent)">
+        <Destination>VFS\ProgramFilesX64\OpenJDK\%(RecursiveDir)</Destination>
+      </Content>
+    </ItemGroup>
+  </Target>
 </Project>
