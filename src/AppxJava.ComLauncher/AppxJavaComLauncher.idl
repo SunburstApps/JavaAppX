@@ -4,9 +4,10 @@ import "ocidl.idl";
 [uuid(05E694E8-D211-4D1C-9DCB-D42B9C6E74C7)]
 interface IRunningProcess : IUnknown
 {
-	[propget] HRESULT StandardInput([out, retval] ISequentialStream **ppStream);
-	[propget] HRESULT StandardOutput([out, retval] ISequentialStream **ppStream);
-	[propget] HRESULT StandardError([out, retval] ISequentialStream **ppStream);
+	HRESULT ReadStandardOutput([in] DWORD DesiredLength, [out, retval] BSTR *Data);
+	HRESULT ReadStandardError([in] DWORD DesiredLength, [out, retval] BSTR *Data);
+	HRESULT WriteStandardInput([in] BSTR Data);
+	HRESULT CloseStandardInput();
 
 	[propget] HRESULT HasExited([out, retval] VARIANT_BOOL *bExited);
 	[propget] HRESULT ExitCode([out, retval] INT *iExitCode);

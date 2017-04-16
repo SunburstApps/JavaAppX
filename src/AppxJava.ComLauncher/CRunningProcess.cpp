@@ -28,9 +28,25 @@ public:
 		if (hProcess != nullptr) CloseHandle(hProcess);
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE get_StandardInput(ISequentialStream **ppStream) { return E_NOTIMPL; }
-	virtual HRESULT STDMETHODCALLTYPE get_StandardOutput(ISequentialStream **ppStream) { return E_NOTIMPL; }
-	virtual HRESULT STDMETHODCALLTYPE get_StandardError(ISequentialStream **ppStream) { return E_NOTIMPL; }
+	virtual HRESULT STDMETHODCALLTYPE ReadStandardOutput(DWORD DesiredLength, BSTR *Data)
+	{
+		return E_NOTIMPL;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE ReadStandardError(DWORD DesiredLength, BSTR *Data)
+	{
+		return E_NOTIMPL;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE WriteStandardInput(BSTR Data)
+	{
+		return E_NOTIMPL;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE CloseStandardInput(void)
+	{
+		return E_NOTIMPL;
+	}
 
 	virtual HRESULT STDMETHODCALLTYPE get_HasExited(VARIANT_BOOL *bExited)
 	{
