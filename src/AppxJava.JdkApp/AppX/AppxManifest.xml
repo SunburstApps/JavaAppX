@@ -11,7 +11,7 @@
          xmlns:rescap3="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities/3"
          xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
          IgnorableNamespaces="uap uap2 uap3 uap4 desktop desktop2 rescap rescap2 rescap3 com">
-  <Identity Name="AppxJava.Jdk" Publisher="CN=William Kent - Internal Publisher" ProcessorArchitecture="x86" ResourceId="neutral" Version="0.0.0.1" />
+  <Identity Name="AppxJava.Jdk" Publisher="CN=William Kent - Internal Publisher" ProcessorArchitecture="x64" ResourceId="neutral" Version="0.0.0.1" />
 
   <Properties>
     <DisplayName>Java Development Kit</DisplayName>
