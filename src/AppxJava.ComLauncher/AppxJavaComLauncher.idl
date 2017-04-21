@@ -38,8 +38,8 @@ interface IJavaLauncher : IUnknown
 	[propget] HRESULT ProgramArguments([out, retval] SAFEARRAY(BSTR) *pArgv);
 	[propput] HRESULT ProgramArguments([in] SAFEARRAY(BSTR) argv);
 
-	HRESULT LaunchClass([in] BSTR className, [in] JAVA_LAUNCH_STYLE launchStyle, [out, retval] IRunningProcess **pProcess);
-	HRESULT LaunchJarFile([in] BSTR jarPath, [in] JAVA_LAUNCH_STYLE launchStyle, [out, retval] IRunningProcess **pProcess);
+	HRESULT LaunchClass([in] BSTR className, [in] JAVA_LAUNCH_STYLE launchStyle, [in] DWORD callerProcessId, [out, retval] IRunningProcess **pProcess);
+	HRESULT LaunchJarFile([in] BSTR jarPath, [in] JAVA_LAUNCH_STYLE launchStyle, [in] DWORD callerProcessId, [out, retval] IRunningProcess **pProcess);
 };
 
 typedef enum
@@ -102,7 +102,7 @@ interface IJdkToolLauncher : IUnknown
 	[propget] HRESULT EnvironmentVariables([out, retval] SAFEARRAY(BSTR) *pArgv);
 	[propput] HRESULT EnvironmentVariables([in] SAFEARRAY(BSTR) argv);
 
-	HRESULT Launch([in] JAVA_LAUNCH_STYLE launchStyle, [out, retval] IRunningProcess **pProcess);
+	HRESULT Launch([in] JAVA_LAUNCH_STYLE launchStyle, [in] DWORD callerProcessId, [out, retval] IRunningProcess **pProcess);
 };
 
 [

@@ -1,3 +1,4 @@
+
 #include "stdafx.h"
 #include "AppxJavaComLauncher_i.h"
 #include <atlcoll.h>
@@ -217,12 +218,12 @@ public:
 		return hr;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE LaunchClass(BSTR className, JAVA_LAUNCH_STYLE launchStyle, IRunningProcess **pProcess)
+	virtual HRESULT STDMETHODCALLTYPE LaunchClass(BSTR className, JAVA_LAUNCH_STYLE launchStyle, DWORD callerProcessId, IRunningProcess **pProcess)
 	{
 		return E_NOTIMPL;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE LaunchJarFile(BSTR jarPath, JAVA_LAUNCH_STYLE launchStyle, IRunningProcess **pProcess)
+	virtual HRESULT STDMETHODCALLTYPE LaunchJarFile(BSTR jarPath, JAVA_LAUNCH_STYLE launchStyle, DWORD callerProcessId, IRunningProcess **pProcess)
 	{
 		return E_NOTIMPL;
 	}
