@@ -7,7 +7,7 @@ class ATL_NO_VTABLE CRunningProcess :
 	public IRunningProcess
 {
 private:
-	HANDLE hProcess;
+	HANDLE hProcess, hStdInStream, hStdOutStream, hStdErrStream;
 
 public:
 	DECLARE_NOT_AGGREGATABLE(CRunningProcess)
@@ -26,6 +26,31 @@ public:
 	void FinalRelease()
 	{
 		if (hProcess != nullptr) CloseHandle(hProcess);
+		if (hStdInStream != nullptr) CloseHandle(hStdInStream);
+		if (hStdOutStream != nullptr) CloseHandle(hStdOutStream);
+		if (hStdErrStream != nullptr) CloseHandle(hStdErrStream);
+	}
+
+	static_assert(sizeof(LONG_PTR) == sizeof(HANDLE), "I/O handles would be truncated during IPC");
+	virtual HRESULT STDMETHODCALLTYPE get_StandardInput(LONG_PTR *hStdIn)
+	{
+		if (hStdIn == nullptr) return E_INVALIDARG;
+		*hStdIn = (LONG_PTR) hStdInStream;
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE get_StandardOutput(LONG_PTR *hStdOut)
+	{
+		if (hStdOut == nullptr) return E_INVALIDARG;
+		*hStdOut = (LONG_PTR)hStdOutStream;
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE get_StandardError(LONG_PTR *hStdErr)
+	{
+		if (hStdErr == nullptr) return E_INVALIDARG;
+		*hStdErr = (LONG_PTR)hStdErrStream;
+		return S_OK;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE ReadStandardOutput(DWORD DesiredLength, BSTR *Data)
@@ -101,21 +126,24 @@ public:
 		return WaitForExit(INFINITE);
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE Initialize(HANDLE hProcess)
+	virtual HRESULT STDMETHODCALLTYPE Initialize(HANDLE hProcess, HANDLE hStdIn, HANDLE hStdOut, HANDLE hStdErr)
 	{
 		if (hProcess == INVALID_HANDLE_VALUE) return E_INVALIDARG;
 		if (this->hProcess != nullptr) return E_FAIL;
 		this->hProcess = hProcess;
+		this->hStdInStream = hStdIn;
+		this->hStdOutStream = hStdOut;
+		this->hStdErrStream = hStdErr;
 		return S_OK;
 	}
 };
 
-HRESULT CRunningProcess_CreateInstance(CComPtr<IRunningProcess>& comObj, HANDLE hProcess)
+HRESULT CRunningProcess_CreateInstance(CComPtr<IRunningProcess>& comObj, HANDLE hProcess, HANDLE hStdIn, HANDLE hStdOut, HANDLE hStdErr)
 {
 	HRESULT hr = CRunningProcess::CreateInstance(&comObj);
 	if (FAILED(hr)) return hr;
 
-	hr = comObj->Initialize(hProcess);
+	hr = comObj->Initialize(hProcess, hStdIn, hStdOut, hStdErr);
 	if (FAILED(hr)) return hr;
 
 	return S_OK;

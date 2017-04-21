@@ -5,10 +5,9 @@ import "ocidl.idl";
 [uuid(05E694E8-D211-4D1C-9DCB-D42B9C6E74C7)]
 interface IRunningProcess : IUnknown
 {
-	HRESULT ReadStandardOutput([in] DWORD DesiredLength, [out, retval] BSTR *Data);
-	HRESULT ReadStandardError([in] DWORD DesiredLength, [out, retval] BSTR *Data);
-	HRESULT WriteStandardInput([in] BSTR Data);
-	HRESULT CloseStandardInput();
+	[propget] HRESULT StandardInput([out, retval] LONG_PTR *hStdIn);
+	[propget] HRESULT StandardOutput([out, retval] LONG_PTR *hStdOut);
+	[propget] HRESULT StandardError([out, retval] LONG_PTR *hStdErr);
 
 	[propget] HRESULT HasExited([out, retval] VARIANT_BOOL *bExited);
 	[propget] HRESULT ExitCode([out, retval] INT *iExitCode);
@@ -17,7 +16,7 @@ interface IRunningProcess : IUnknown
 	HRESULT WaitForExit([in] DWORD ulTimeoutMillisconds);
 	HRESULT WaitForExitIndefinite();
 
-	[local] HRESULT Initialize(HANDLE hProcess);
+	[local] HRESULT Initialize(HANDLE hProcess, HANDLE hStdIn, HANDLE hStdOut, HANDLE hStdErr);
 };
 
 typedef enum
