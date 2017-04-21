@@ -220,9 +220,9 @@ public:
 		return hr;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE get_EnvironmentVariables(SAFEARRAY * *pArgv)
+	virtual HRESULT STDMETHODCALLTYPE get_EnvironmentVariables(SAFEARRAY * *pEnvironmentVariables)
 	{
-		if (pArgv == nullptr) return E_INVALIDARG;
+		if (pEnvironmentVariables == nullptr) return E_INVALIDARG;
 
 		LONG Count = mEnvironmentVariables.GetCount();
 		SAFEARRAYBOUND bound; bound.lLbound = 0; bound.cElements = Count;
@@ -234,27 +234,27 @@ public:
 			SafeArrayPutElement(psa, &i, bstr.Detach());
 		}
 
-		*pArgv = psa;
+		*pEnvironmentVariables = psa;
 		return S_OK;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE put_EnvironmentVariables(SAFEARRAY * argv)
+	virtual HRESULT STDMETHODCALLTYPE put_EnvironmentVariables(SAFEARRAY * environmentVariables)
 	{
-		if (argv == nullptr) return E_INVALIDARG;
+		if (environmentVariables == nullptr) return E_INVALIDARG;
 		CAtlArray<CString> oldValue; oldValue.Copy(mEnvironmentVariables);
 
 		VARTYPE vt = VT_NULL;
-		HRESULT hr = SafeArrayGetVartype(argv, &vt);
+		HRESULT hr = SafeArrayGetVartype(environmentVariables, &vt);
 		if (FAILED(hr)) return hr;
 		if (vt != VT_BSTR) return E_INVALIDARG;
 
-		UINT dimensions = SafeArrayGetDim(argv);
+		UINT dimensions = SafeArrayGetDim(environmentVariables);
 		if (dimensions != 1) return E_INVALIDARG;
 
 		LONG lower, upper;
-		hr = SafeArrayGetLBound(argv, 0, &lower);
+		hr = SafeArrayGetLBound(environmentVariables, 0, &lower);
 		if (FAILED(hr)) return hr;
-		hr = SafeArrayGetUBound(argv, 0, &upper);
+		hr = SafeArrayGetUBound(environmentVariables, 0, &upper);
 		if (FAILED(hr)) return hr;
 		if (lower != 0) return E_INVALIDARG;
 
@@ -262,7 +262,7 @@ public:
 		mClassPath.RemoveAll();
 		for (LONG i = 0; i < length; i++) {
 			CComBSTR bstr;
-			hr = SafeArrayGetElement(argv, &i, &bstr);
+			hr = SafeArrayGetElement(environmentVariables, &i, &bstr);
 			if (FAILED(hr)) goto failure;
 
 			mEnvironmentVariables.Add(bstr);
