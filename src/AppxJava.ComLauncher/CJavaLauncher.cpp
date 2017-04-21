@@ -13,7 +13,7 @@ class ATL_NO_VTABLE CJavaLauncher :
 {
 private:
 	CComBSTR mWorkingDirectory = nullptr;
-	CAtlArray<CString> mClassPath, mExtraJavaArguments, mProgramArguments;
+	CAtlArray<CString> mClassPath, mExtraJavaArguments, mProgramArguments, mEnvironmentVariables;
 
 public:
 	DECLARE_NOT_AGGREGATABLE(CJavaLauncher);
@@ -220,6 +220,62 @@ public:
 		return hr;
 	}
 
+	virtual HRESULT STDMETHODCALLTYPE get_EnvironmentVariables(SAFEARRAY * *pArgv)
+	{
+		if (pArgv == nullptr) return E_INVALIDARG;
+
+		LONG Count = mEnvironmentVariables.GetCount();
+		SAFEARRAYBOUND bound; bound.lLbound = 0; bound.cElements = Count;
+		SAFEARRAY *psa = SafeArrayCreate(VT_BSTR, 1, &bound);
+
+		for (LONG i = 0; i < Count; i++)
+		{
+			CComBSTR bstr = mEnvironmentVariables.GetAt(i);
+			SafeArrayPutElement(psa, &i, bstr.Detach());
+		}
+
+		*pArgv = psa;
+		return S_OK;
+	}
+
+	virtual HRESULT STDMETHODCALLTYPE put_EnvironmentVariables(SAFEARRAY * argv)
+	{
+		if (argv == nullptr) return E_INVALIDARG;
+		CAtlArray<CString> oldValue; oldValue.Copy(mEnvironmentVariables);
+
+		VARTYPE vt = VT_NULL;
+		HRESULT hr = SafeArrayGetVartype(argv, &vt);
+		if (FAILED(hr)) return hr;
+		if (vt != VT_BSTR) return E_INVALIDARG;
+
+		UINT dimensions = SafeArrayGetDim(argv);
+		if (dimensions != 1) return E_INVALIDARG;
+
+		LONG lower, upper;
+		hr = SafeArrayGetLBound(argv, 0, &lower);
+		if (FAILED(hr)) return hr;
+		hr = SafeArrayGetUBound(argv, 0, &upper);
+		if (FAILED(hr)) return hr;
+		if (lower != 0) return E_INVALIDARG;
+
+		LONG length = upper - lower;
+		mClassPath.RemoveAll();
+		for (LONG i = 0; i < length; i++) {
+			CComBSTR bstr;
+			hr = SafeArrayGetElement(argv, &i, &bstr);
+			if (FAILED(hr)) goto failure;
+
+			mEnvironmentVariables.Add(bstr);
+		}
+
+		return S_OK;
+
+	failure:
+		// Don't leave the object in an inconsistent state.
+		mEnvironmentVariables.Copy(oldValue);
+		return hr;
+	}
+
 	virtual HRESULT STDMETHODCALLTYPE LaunchClass(BSTR className, JAVA_LAUNCH_STYLE launchStyle, DWORD callerProcessId, IRunningProcess **pProcess)
 	{
 		if (pProcess == nullptr) return E_INVALIDARG;
@@ -269,7 +325,7 @@ public:
 		if (recipientProcess == INVALID_HANDLE_VALUE) return HRESULT_FROM_WIN32(GetLastError());
 
 		CComPtr<IRunningProcess> processPtr;
-		HRESULT hr = CRunningProcess_Launch(processPtr, (LPWSTR)processArgv.GetString(), L"OpenJDK", mWorkingDirectory, CAtlArray<CString>(), nShowCmd, recipientProcess);
+		HRESULT hr = CRunningProcess_Launch(processPtr, (LPWSTR)processArgv.GetString(), L"OpenJDK", mWorkingDirectory, mEnvironmentVariables, nShowCmd, recipientProcess);
 		if (SUCCEEDED(hr)) *pProcess = processPtr.Detach();
 		return hr;
 	}
@@ -326,7 +382,7 @@ public:
 		if (recipientProcess == INVALID_HANDLE_VALUE) return HRESULT_FROM_WIN32(GetLastError());
 
 		CComPtr<IRunningProcess> processPtr;
-		HRESULT hr = CRunningProcess_Launch(processPtr, (LPWSTR)processArgv.GetString(), L"OpenJDK", mWorkingDirectory, CAtlArray<CString>(), nShowCmd, recipientProcess);
+		HRESULT hr = CRunningProcess_Launch(processPtr, (LPWSTR)processArgv.GetString(), L"OpenJDK", mWorkingDirectory, mEnvironmentVariables, nShowCmd, recipientProcess);
 		if (SUCCEEDED(hr)) *pProcess = processPtr.Detach();
 		return hr;
 	}
