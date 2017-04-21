@@ -27,10 +27,12 @@ public:
 
 	void FinalRelease()
 	{
+		HANDLE hProcess = GetCurrentProcess();
+
 		if (hProcess != nullptr) CloseHandle(hProcess);
-		if (hStdInStream != nullptr) CloseHandle(hStdInStream);
-		if (hStdOutStream != nullptr) CloseHandle(hStdOutStream);
-		if (hStdErrStream != nullptr) CloseHandle(hStdErrStream);
+		if (hStdInStream != INVALID_HANDLE_VALUE) DuplicateHandle(hProcess, hStdInStream, nullptr, nullptr, 0, false, DUPLICATE_CLOSE_SOURCE);
+		if (hStdOutStream != INVALID_HANDLE_VALUE) DuplicateHandle(hProcess, hStdOutStream, nullptr, nullptr, 0, false, DUPLICATE_CLOSE_SOURCE);
+		if (hStdErrStream != INVALID_HANDLE_VALUE) DuplicateHandle(hProcess, hStdErrStream, nullptr, nullptr, 0, false, DUPLICATE_CLOSE_SOURCE);
 	}
 
 	static_assert(sizeof(LONG_PTR) == sizeof(HANDLE), "I/O handles would be truncated during IPC");
