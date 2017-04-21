@@ -384,6 +384,7 @@ public:
 		CComPtr<IRunningProcess> processPtr;
 		HRESULT hr = CRunningProcess_Launch(processPtr, (LPWSTR)processArgv.GetString(), L"OpenJDK", mWorkingDirectory, mEnvironmentVariables, nShowCmd, recipientProcess);
 		if (SUCCEEDED(hr)) *pProcess = processPtr.Detach();
+		CloseHandle(recipientProcess);
 		return hr;
 	}
 };
