@@ -1,3 +1,4 @@
+
 import "oaidl.idl";
 import "ocidl.idl";
 
@@ -120,7 +121,7 @@ library AppxJavaLauncherLib
 	};
 
 	[uuid(5EDE5D2D-C324-4970-86B3-6E006D4DD824)]
-	coclass JdkLauncher
+	coclass JdkToolLauncher
 	{
 		[default] interface IJdkToolLauncher;
 	};
