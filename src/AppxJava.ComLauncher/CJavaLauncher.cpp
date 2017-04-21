@@ -1,8 +1,10 @@
-
 #include "stdafx.h"
 #include "AppxJavaComLauncher_i.h"
 #include <atlcoll.h>
 #include <atlstr.h>
+
+extern HRESULT CRunningProcess_Launch(CComPtr<IRunningProcess>& processPtr, LPWSTR commandLine, LPWSTR windowTitle, LPWSTR workingDirectory,
+	const CAtlArray<CString>& environmentVariables, int nShowCmd, HANDLE hRecipientProcess);
 
 class ATL_NO_VTABLE CJavaLauncher :
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -220,12 +222,113 @@ public:
 
 	virtual HRESULT STDMETHODCALLTYPE LaunchClass(BSTR className, JAVA_LAUNCH_STYLE launchStyle, DWORD callerProcessId, IRunningProcess **pProcess)
 	{
-		return E_NOTIMPL;
+		if (pProcess == nullptr) return E_INVALIDARG;
+		if (launchStyle < JAVA_LAUNCH_STYLE_BACKGROUND || launchStyle > JAVA_LAUNCH_STYLE_GUI) return E_INVALIDARG;
+
+		CString processArgv;
+		if (launchStyle == JAVA_LAUNCH_STYLE_GUI) processArgv += L"\"C:\\Program Files\\OpenJDK\\bin\\javaw.exe\"";
+		else processArgv += L"\"C:\\Program Files\\OpenJDK\\bin\\java.exe\"";
+		processArgv += L" ";
+
+		if (mClassPath.GetCount() != 0) {
+			processArgv += L"-cp \"";
+			bool firstTime = true;
+
+			DWORD limit = mClassPath.GetCount();
+			for (DWORD i = 0; i < limit; i++) {
+				if (firstTime) firstTime = false;
+				else processArgv += mClassPath[i];
+			}
+		}
+		processArgv += L"\" ";
+
+		if (mExtraJavaArguments.GetCount() != 0) {
+			DWORD limit = mExtraJavaArguments.GetCount();
+			for (DWORD i = 0; i < limit; i++) {
+				processArgv += L"\"";
+				processArgv += mExtraJavaArguments.GetAt(i);
+				processArgv += L"\" ";
+			}
+		}
+
+		processArgv += className;
+		if (mProgramArguments.GetCount() != 0) {
+			processArgv += L" ";
+			DWORD limit = mProgramArguments.GetCount();
+			for (DWORD i = 0; i < limit; i++) {
+				processArgv += L"\"";
+				processArgv += mProgramArguments.GetAt(i);
+				processArgv += L"\" ";
+			}
+		}
+
+		int nShowCmd = SW_SHOWNORMAL;
+		if (launchStyle == JAVA_LAUNCH_STYLE_BACKGROUND) nShowCmd = SW_HIDE;
+
+		HANDLE recipientProcess = OpenProcess(PROCESS_DUP_HANDLE, false, callerProcessId);
+		if (recipientProcess == INVALID_HANDLE_VALUE) return HRESULT_FROM_WIN32(GetLastError());
+
+		CComPtr<IRunningProcess> processPtr;
+		HRESULT hr = CRunningProcess_Launch(processPtr, (LPWSTR)processArgv.GetString(), L"OpenJDK", mWorkingDirectory, CAtlArray<CString>(), nShowCmd, recipientProcess);
+		if (SUCCEEDED(hr)) *pProcess = processPtr.Detach();
+		return hr;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE LaunchJarFile(BSTR jarPath, JAVA_LAUNCH_STYLE launchStyle, DWORD callerProcessId, IRunningProcess **pProcess)
 	{
-		return E_NOTIMPL;
+		if (pProcess == nullptr) return E_INVALIDARG;
+		if (launchStyle < JAVA_LAUNCH_STYLE_BACKGROUND || launchStyle > JAVA_LAUNCH_STYLE_GUI) return E_INVALIDARG;
+
+		CString processArgv;
+		if (launchStyle == JAVA_LAUNCH_STYLE_GUI) processArgv += L"\"C:\\Program Files\\OpenJDK\\bin\\javaw.exe\"";
+		else processArgv += L"\"C:\\Program Files\\OpenJDK\\bin\\java.exe\"";
+		processArgv += L" ";
+
+		if (mClassPath.GetCount() != 0) {
+			processArgv += L"-cp \"";
+			bool firstTime = true;
+
+			DWORD limit = mClassPath.GetCount();
+			for (DWORD i = 0; i < limit; i++) {
+				if (firstTime) firstTime = false;
+				else processArgv += mClassPath[i];
+			}
+		}
+		processArgv += L"\" ";
+
+		if (mExtraJavaArguments.GetCount() != 0) {
+			DWORD limit = mExtraJavaArguments.GetCount();
+			for (DWORD i = 0; i < limit; i++) {
+				processArgv += L"\"";
+				processArgv += mExtraJavaArguments.GetAt(i);
+				processArgv += L"\" ";
+			}
+		}
+
+		processArgv += L"-jar \"";
+		processArgv += jarPath;
+		processArgv += L"\"";
+
+		if (mProgramArguments.GetCount() != 0) {
+			processArgv += L" ";
+			DWORD limit = mProgramArguments.GetCount();
+			for (DWORD i = 0; i < limit; i++) {
+				processArgv += L"\"";
+				processArgv += mProgramArguments.GetAt(i);
+				processArgv += L"\" ";
+			}
+		}
+
+		int nShowCmd = SW_SHOWNORMAL;
+		if (launchStyle == JAVA_LAUNCH_STYLE_BACKGROUND) nShowCmd = SW_HIDE;
+
+		HANDLE recipientProcess = OpenProcess(PROCESS_DUP_HANDLE, false, callerProcessId);
+		if (recipientProcess == INVALID_HANDLE_VALUE) return HRESULT_FROM_WIN32(GetLastError());
+
+		CComPtr<IRunningProcess> processPtr;
+		HRESULT hr = CRunningProcess_Launch(processPtr, (LPWSTR)processArgv.GetString(), L"OpenJDK", mWorkingDirectory, CAtlArray<CString>(), nShowCmd, recipientProcess);
+		if (SUCCEEDED(hr)) *pProcess = processPtr.Detach();
+		return hr;
 	}
 };
 
