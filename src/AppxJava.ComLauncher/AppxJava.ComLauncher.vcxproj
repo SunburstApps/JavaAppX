@@ -218,6 +218,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CJavaLauncher.cpp" />
+    <ClCompile Include="CJdkToolLauncher.cpp" />
     <ClCompile Include="CRunningProcess.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
