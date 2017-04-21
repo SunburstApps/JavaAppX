@@ -147,7 +147,7 @@ public:
 		if (lower != 0) return E_INVALIDARG;
 
 		LONG length = upper - lower;
-		mClassPath.RemoveAll();
+		mExtraJavaArguments.RemoveAll();
 		for (LONG i = 0; i < length; i++) {
 			CComBSTR bstr;
 			hr = SafeArrayGetElement(extraJavaArgv, &i, &bstr);
@@ -203,7 +203,7 @@ public:
 		if (lower != 0) return E_INVALIDARG;
 
 		LONG length = upper - lower;
-		mClassPath.RemoveAll();
+		mProgramArguments.RemoveAll();
 		for (LONG i = 0; i < length; i++) {
 			CComBSTR bstr;
 			hr = SafeArrayGetElement(argv, &i, &bstr);
@@ -259,7 +259,7 @@ public:
 		if (lower != 0) return E_INVALIDARG;
 
 		LONG length = upper - lower;
-		mClassPath.RemoveAll();
+		mEnvironmentVariables.RemoveAll();
 		for (LONG i = 0; i < length; i++) {
 			CComBSTR bstr;
 			hr = SafeArrayGetElement(environmentVariables, &i, &bstr);
