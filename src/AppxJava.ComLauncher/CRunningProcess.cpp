@@ -266,7 +266,7 @@ HRESULT CRunningProcess_Launch(CComPtr<IRunningProcess>& processPtr, LPWSTR comm
 	}
 
 	HANDLE currentProcess = GetCurrentProcess();
-	HANDLE hChildProcessDuplicated = INVALID_HANDLE_VALUE, hStdInDuplicated = INVALID_HANDLE_VALUE, hStdOutDuplicated = INVALID_HANDLE_VALUE, hStdErrDuplicated = INVALID_HANDLE_VALUE;
+	HANDLE hStdInDuplicated = INVALID_HANDLE_VALUE, hStdOutDuplicated = INVALID_HANDLE_VALUE, hStdErrDuplicated = INVALID_HANDLE_VALUE;
 
 	if (!DuplicateHandle(currentProcess, hStdInWrite, hRecipientProcess, &hStdInDuplicated, 0, false, DUPLICATE_SAME_ACCESS)) {
 		dwError = GetLastError();
@@ -283,12 +283,7 @@ HRESULT CRunningProcess_Launch(CComPtr<IRunningProcess>& processPtr, LPWSTR comm
 		goto failure;
 	}
 
-	if (!DuplicateHandle(currentProcess, processInfo.hProcess, hRecipientProcess, &hChildProcessDuplicated, 0, false, DUPLICATE_SAME_ACCESS)) {
-		dwError = GetLastError();
-		goto failure;
-	}
-
-	hr = CRunningProcess_CreateInstance(processPtr, hChildProcessDuplicated, hStdInDuplicated, hStdOutDuplicated, hStdErrDuplicated);
+	hr = CRunningProcess_CreateInstance(processPtr, processInfo.hProcess, hStdInDuplicated, hStdOutDuplicated, hStdErrDuplicated);
 	if (FAILED(hr)) goto failure;
 
 	// Only resume the process once the object to monitor it has been created.
@@ -298,6 +293,7 @@ HRESULT CRunningProcess_Launch(CComPtr<IRunningProcess>& processPtr, LPWSTR comm
 failure:
 	// Since the caller cannot monitor the process, it is best to kill it instead.
 	TerminateProcess(processInfo.hProcess, EXIT_FAILURE);
+	if (processInfo.hProcess != INVALID_HANDLE_VALUE) CloseHandle(processInfo.hProcess);
 	hr = HRESULT_FROM_WIN32(dwError);
 
 cleanup:
@@ -307,9 +303,7 @@ cleanup:
 	CloseHandleSafe(hStdOutWrite);
 	CloseHandleSafe(hStdErrRead);
 	CloseHandleSafe(hStdErrWrite);
-	CloseHandleSafe(processInfo.hProcess);
 	CloseHandleSafe(processInfo.hThread);
-	CloseDuplicatedHandle(hChildProcessDuplicated, currentProcess);
 	CloseDuplicatedHandle(hStdInDuplicated, currentProcess);
 	CloseDuplicatedHandle(hStdOutDuplicated, currentProcess);
 	CloseDuplicatedHandle(hStdErrDuplicated, currentProcess);
