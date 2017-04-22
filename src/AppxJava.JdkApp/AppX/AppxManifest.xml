@@ -65,7 +65,7 @@
             <com:TypeLib Id="B140CC3A-1AAE-4A88-8C63-3D51EF60BE41">
               <com:Version DisplayName="OpenJDK App" VersionNumber="1.0" LocaleId="0" LibraryFlag="0">
                 <com:Win32Path Path="Launcher\AppxJava.ComLauncher.exe" ResourceId="1" />
-                <com:Win64Path Path="Launcher\AppxJava.ComLauncher.exe" ResourceId="1" />
+                <com:Win64Path Path="Launcher\AppxJava.ComLauncher.exe" ResourceId="2" />
               </com:Version>
             </com:TypeLib>
           </com:ComInterface>
