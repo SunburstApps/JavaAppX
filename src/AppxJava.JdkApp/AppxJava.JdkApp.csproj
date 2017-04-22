@@ -48,6 +48,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="AppxJava.ManagedLauncher">
+      <HintPath>$(SolutionDir)\$(Configuration)\AppxJava.ManagedLauncher.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainForm.cs">
