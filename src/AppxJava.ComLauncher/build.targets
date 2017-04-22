@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="GenerateTlb64" BeforeTargets="ResourceCompile" Inputs="$(ProjectDir)AppxJavaComLauncher.idl" Outputs="$(IntDir)AppxJavaComLauncher_x64.tlb">
+    <Exec Command="midl.exe /nologo /tlb &quot;$(IntDir)AppxJavaComLauncher_x64.tlb&quot; /env x64 /x64 &quot;$(ProjectDir)AppxJavaComLauncher.idl&quot;" />
+  </Target>
+</Project>

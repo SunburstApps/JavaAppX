@@ -58,6 +58,7 @@
     <None Include="AppxJava.ComLauncher.rgs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="build.targets" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="AppxJavaComLauncher.idl">

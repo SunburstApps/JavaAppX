@@ -237,11 +237,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AppxJava.ComLauncher.rgs" />
+    <None Include="build.targets" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="AppxJavaComLauncher.idl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="build.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
