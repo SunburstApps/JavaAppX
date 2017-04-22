@@ -34,6 +34,43 @@
     <Application Id="App" Executable="Launcher\AppxJava.JdkApp.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements DisplayName="Java Development Kit" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png"
                           Description="Compile and run code targeting Java SE version 1.8." BackgroundColor="#333333"/>
+
+      <Extensions>
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:ExeServer Executable="Launcher\AppxJava.ComLauncher.exe" DisplayName="OpenJDK COM Server">
+              <com:Class Id="67CE3994-EC0A-4364-B8BD-DC6D1C61FCF0" DisplayName="OpenJDK Java Launcher"
+                         ProgId="Sunburst.JavaLauncher.1" VersionIndependentProgId="Sunburst.JavaLauncher" />
+              <com:Class Id="5EDE5D2D-C324-4970-86B3-6E006D4DD824" DisplayName="OpenJDK Development Tool Launcher"
+                         ProgId="Sunburst.JdkToolLauncher.1" VersionIndependentProgId="Sunburst.JdkToolLauncher" />
+            </com:ExeServer>
+
+            <com:ProgId Id="Sunburst.JavaLauncher" CurrentVersion="Sunburst.JavaLauncher.1" />
+            <com:ProgId Id="Sunburst.JdkToolLauncher" CurrentVersion="Sunburst.JdkToolLauncher.1" />
+            <com:ProgId Clsid="67CE3994-EC0A-4364-B8BD-DC6D1C61FCF0" Id="Sunburst.JavaLauncher.1" />
+            <com:ProgId Clsid="5EDE5D2D-C324-4970-86B3-6E006D4DD824" Id="Sunburst.JdkToolLauncher.1" />
+          </com:ComServer>
+        </com:Extension>
+
+        <com:Extension Category="windows.comInterface">
+          <com:ComInterface>
+            <com:Interface Id="D704B65E-8559-4087-88C7-0A5C7ADB2407" UseUniversalMarshaler="true">
+              <com:TypeLib Id="B140CC3A-1AAE-4A88-8C63-3D51EF60BE41" VersionNumber="1.0" />
+            </com:Interface>
+
+            <com:Interface Id="BB3B0B30-9FA2-4D27-856A-4190FF19CA8B" UseUniversalMarshaler="true">
+              <com:TypeLib Id="B140CC3A-1AAE-4A88-8C63-3D51EF60BE41" VersionNumber="1.0" />
+            </com:Interface>
+
+            <com:TypeLib Id="B140CC3A-1AAE-4A88-8C63-3D51EF60BE41">
+              <com:Version DisplayName="OpenJDK App" VersionNumber="1.0" LocaleId="0" LibraryFlag="0">
+                <com:Win32Path Path="Launcher\AppxJava.ComLauncher.exe" ResourceId="1" />
+                <com:Win64Path Path="Launcher\AppxJava.ComLauncher.exe" ResourceId="1" />
+              </com:Version>
+            </com:TypeLib>
+          </com:ComInterface>
+        </com:Extension>
+      </Extensions>
     </Application>
   </Applications>
 </Package>
