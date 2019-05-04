@@ -1,0 +1,4 @@
+﻿<Project>
+  <Import Project="Sdk.targets" Sdk="Sunburst.VisualCpp.PackageReference" Version="1.0.1" />
+  <Import Project="$(MSBuildProjectDirectory)$(MSBuildProjectFileName).targets" Condition="Exists('$(MSBuildProjectDirectory)$(MSBuildProjectFileName).targets')" />
+</Project>
