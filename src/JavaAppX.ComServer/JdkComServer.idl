@@ -1,0 +1,117 @@
+import "oaidl.idl";
+
+[uuid(05E694E8-D211-4D1C-9DCB-D42B9C6E74C7)]
+interface IRunningProcess : IUnknown
+{
+	HRESULT OpenStandardInput([in] DWORD destinationProcessId, [out, retval] LONG_PTR* hStdIn);
+	HRESULT OpenStandardOutput([in] DWORD destinationProcessId, [out, retval] LONG_PTR* hStdOut);
+	HRESULT OpenStandardError([in] DWORD destinationProcessId, [out, retval] LONG_PTR* hStdErr);
+
+	[propget] HRESULT HasExited([out, retval] VARIANT_BOOL* bExited);
+	[propget] HRESULT ExitCode([out, retval] INT* iExitCode);
+
+	HRESULT Kill();
+	HRESULT WaitForExit();
+	HRESULT WaitForExitTimeout([in] DWORD ulTimeoutMillisconds);
+};
+
+typedef enum
+{
+	JAVA_LAUNCH_STYLE_BACKGROUND = 0,
+	JAVA_LAUNCH_STYLE_CREATE_CONSOLE_WINDOW,
+	JAVA_LAUNCH_STYLE_GUI
+} JAVA_LAUNCH_STYLE;
+
+[uuid(D704B65E-8559-4087-88C7-0A5C7ADB2407)]
+interface IJavaLauncher : IUnknown
+{
+	[propget] HRESULT WorkingDirectory([out, retval, string] BSTR* pstrWorkingDirectory);
+	[propput] HRESULT WorkingDirectory([in, string] BSTR strWorkingDirectory);
+	[propget] HRESULT ClassPath([out, retval] SAFEARRAY(BSTR)* pClassPath);
+	[propput] HRESULT ClassPath([in] SAFEARRAY(BSTR) classPath);
+	[propget] HRESULT ExtraJavaArguments([out, retval] SAFEARRAY(BSTR)* pExtraJavaArgv);
+	[propput] HRESULT ExtraJavaArguments([in] SAFEARRAY(BSTR) extraJavaArgv);
+	[propget] HRESULT ProgramArguments([out, retval] SAFEARRAY(BSTR)* pArgv);
+	[propput] HRESULT ProgramArguments([in] SAFEARRAY(BSTR) argv);
+	[propget] HRESULT EnvironmentVariables([out, retval] SAFEARRAY(BSTR)* pEnvironmentVariables);
+	[propput] HRESULT EnvironmentVariables([in] SAFEARRAY(BSTR) environmentVariables);
+
+	HRESULT LaunchClass([in] BSTR className, [in] JAVA_LAUNCH_STYLE launchStyle, [in] DWORD callerProcessId, [out, retval] IRunningProcess** pProcess);
+	HRESULT LaunchJarFile([in] BSTR jarPath, [in] JAVA_LAUNCH_STYLE launchStyle, [in] DWORD callerProcessId, [out, retval] IRunningProcess** pProcess);
+};
+
+typedef enum
+{
+	JDK_TOOL_JAVAC = 0, // first so it is the default
+	JDK_TOOL_JAOTC,
+	JDK_TOOL_JAR,
+	JDK_TOOL_JARSIGNER,
+	JDK_TOOL_JAVADOC,
+	JDK_TOOL_JAVAP,
+	JDK_TOOL_JCMD,
+	JDK_TOOL_JCONSOLE,
+	JDK_TOOL_JDB,
+	JDK_TOOL_DEPRSCAN,
+	JDK_TOOL_JDEPS,
+	JDK_TOOL_JFR,
+	JDK_TOOL_JHSDB,
+	JDK_TOOL_JIMAGE,
+	JDK_TOOL_JINFO,
+	JDK_TOOL_JJS,
+	JDK_TOOL_JLINK,
+	JDK_TOOL_JMAP,
+	JDK_TOOL_JMOD,
+	JDK_TOOL_JPS,
+	JDK_TOOL_JRUNSCRIPT,
+	JDK_TOOL_JSHELL,
+	JDK_TOOL_JSTACK,
+	JDK_TOOL_JSTAT,
+	JDK_TOOL_JSTATD,
+	JDK_TOOL_KEYTOOL,
+	JDK_TOOL_KINIT,
+	JDK_TOOL_KLIST,
+	JDK_TOOL_KTAB,
+	JDK_TOOL_PACK200,
+	JDK_TOOL_RMIC,
+	JDK_TOOL_RMID,
+	JDK_TOOL_RMIREGISTRY,
+	JDK_TOOL_SERIALVER,
+	JDK_TOOL_UNPACK200
+} JDK_TOOL;
+
+[uuid(BB3B0B30-9FA2-4D27-856A-4190FF19CA8B)]
+interface IJdkToolLauncher : IUnknown
+{
+	[propget] HRESULT ToolName([out, retval] JDK_TOOL* pToolId);
+	[propput] HRESULT ToolName([in] JDK_TOOL toolId);
+
+	[propget] HRESULT WorkingDirectory([out, retval, string] BSTR* pstrWorkingDirectory);
+	[propput] HRESULT WorkingDirectory([in, string] BSTR strWorkingDirectory);
+	[propget] HRESULT ProgramArguments([out, retval] SAFEARRAY(BSTR)* pArgv);
+	[propput] HRESULT ProgramArguments([in] SAFEARRAY(BSTR) argv);
+	[propget] HRESULT EnvironmentVariables([out, retval] SAFEARRAY(BSTR)* pEnvironmentVariables);
+	[propput] HRESULT EnvironmentVariables([in] SAFEARRAY(BSTR) environmentVariables);
+
+	HRESULT Launch([in] JAVA_LAUNCH_STYLE launchStyle, [out, retval] IRunningProcess** pProcess);
+};
+
+[
+	uuid(B140CC3A-1AAE-4A88-8C63-3D51EF60BE41),
+	version(1.0),
+]
+library AppxJavaLauncherLib
+{
+	importlib("stdole2.tlb");
+
+	[uuid(67CE3994-EC0A-4364-B8BD-DC6D1C61FCF0)]
+	coclass JavaLauncher
+	{
+		[default] interface IJavaLauncher;
+	};
+
+	[uuid(5EDE5D2D-C324-4970-86B3-6E006D4DD824)]
+	coclass JdkToolLauncher
+	{
+		[default] interface IJdkToolLauncher;
+	};
+};

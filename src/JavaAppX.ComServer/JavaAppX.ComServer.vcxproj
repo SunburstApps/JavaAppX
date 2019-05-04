@@ -151,6 +151,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="JdkComServer_i.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -160,11 +166,24 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="JdkComServer_h.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="JavaAppX.ComServer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="JdkComServer.idl">
+      <DllDataFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dlldata.c</DllDataFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FileName)_i.c</InterfaceIdentifierFileName>
+      <DllDataFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">dlldata.c</DllDataFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FileName)_i.c</InterfaceIdentifierFileName>
+      <DllDataFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dlldata.c</DllDataFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FileName)_i.c</InterfaceIdentifierFileName>
+      <DllDataFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">dlldata.c</DllDataFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FileName)_i.c</InterfaceIdentifierFileName>
+    </Midl>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

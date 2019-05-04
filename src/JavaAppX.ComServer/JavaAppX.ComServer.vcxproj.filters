@@ -21,6 +21,9 @@
     <ClCompile Include="StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JdkComServer_i.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -29,10 +32,18 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JdkComServer_h.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="JavaAppX.ComServer.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="JdkComServer.idl">
+      <Filter>Source Files</Filter>
+    </Midl>
   </ItemGroup>
 </Project>
