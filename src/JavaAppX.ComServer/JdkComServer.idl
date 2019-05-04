@@ -15,7 +15,7 @@ interface IRunningProcess : IUnknown
 	HRESULT WaitForExitTimeout([in] DWORD ulTimeoutMillisconds);
 };
 
-typedef enum
+typedef [v1_enum] enum _JAVA_LAUNCH_STYLE
 {
 	JAVA_LAUNCH_STYLE_BACKGROUND = 0,
 	JAVA_LAUNCH_STYLE_CREATE_CONSOLE_WINDOW,
@@ -40,7 +40,7 @@ interface IJavaLauncher : IUnknown
 	HRESULT LaunchJarFile([in] BSTR jarPath, [in] JAVA_LAUNCH_STYLE launchStyle, [in] DWORD callerProcessId, [out, retval] IRunningProcess** pProcess);
 };
 
-typedef enum
+typedef [v1_enum] enum _JDK_TOOL
 {
 	JDK_TOOL_JAVAC = 0, // first so it is the default
 	JDK_TOOL_JAOTC,
