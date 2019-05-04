@@ -190,6 +190,9 @@
       <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FileName)_i.c</InterfaceIdentifierFileName>
     </Midl>
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="app.manifest" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
