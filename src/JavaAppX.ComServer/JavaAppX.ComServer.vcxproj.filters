@@ -24,6 +24,9 @@
     <ClCompile Include="JdkComServer_i.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RunningProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JdkComServer_h.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RunningProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

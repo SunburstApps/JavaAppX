@@ -7,9 +7,7 @@ interface IRunningProcess : IUnknown
 	HRESULT OpenStandardOutput([in] DWORD destinationProcessId, [out, retval] LONG_PTR* hStdOut);
 	HRESULT OpenStandardError([in] DWORD destinationProcessId, [out, retval] LONG_PTR* hStdErr);
 
-	[propget] HRESULT HasExited([out, retval] VARIANT_BOOL* bExited);
 	[propget] HRESULT ExitCode([out, retval] INT* iExitCode);
-
 	HRESULT Kill();
 	HRESULT WaitForExit();
 	HRESULT WaitForExitTimeout([in] DWORD ulTimeoutMillisconds);
